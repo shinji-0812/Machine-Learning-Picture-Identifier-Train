@@ -1,7 +1,8 @@
 import tensorflow
 from tensorflow.keras import layers, models
-import numpy as np
+import numpy
 import os
+from sklearn.metrics import classification_report, confusion_matrix
 
 IMAGE_SIZE = (224, 224)
 BATCH_SIZE = 32
@@ -145,6 +146,18 @@ print("\n=== Final evaluation on test set ===")
 test_loss, test_acc = model.evaluate(test_data)
 print(f"Test accuracy: {test_acc:.4f}")
 print(f"Test loss:     {test_loss:.4f}")
+
+y_true = []
+y_pred = []
+for images, labels in test_data:
+    preds = model.predict(images, verbose=0)
+    y_true.extend(labels.numpy())
+    y_pred.extend(numpy.argmax(preds, axis=1))
+
+print("\n=== Classification report ===")
+print(classification_report(y_true, y_pred, target_names=class_names))
+print("=== Confusion matrix ===")
+print(confusion_matrix(y_true, y_pred))
 
 model.save(checkpoint_path)
 
