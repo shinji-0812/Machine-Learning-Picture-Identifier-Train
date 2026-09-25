@@ -3,7 +3,7 @@ import tensorflow
 import numpy
 from io import BytesIO
 
-IMAGE_SIZE = (128, 128)
+IMAGE_SIZE = (224, 224)
 
 MODEL_PATH = Path(__file__).resolve().parent / "DATA" / "waste_model.keras"
 CLASS_NAMES_PATH = Path(__file__).resolve().parent / "DATA" / "class_names.txt"
@@ -16,8 +16,10 @@ with open(CLASS_NAMES_PATH, "r") as f:
 
 def predict_image(image):
 
+    file = BytesIO(image.read())
+
     image = tensorflow.keras.utils.load_img(
-        BytesIO(image.read()),
+        file,
         target_size=IMAGE_SIZE
     )
 
