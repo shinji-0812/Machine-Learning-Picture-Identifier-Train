@@ -20,44 +20,108 @@ def home(request):
     result = ""
 
     if prediction is not None:
+
         if confidence > 50:
+
             result = f"""
             <div class="result-card">
-                <div class="result-icon">✅</div>
-                <div class="result-label">Prediction</div>
-                <div class="prediction">{prediction}</div>
-                <div class="confidence-label">Confidence</div>
-                <div class="confidence-bar">
-                    <div class="confidence-fill" style="width: {confidence:.2f}%;"></div>
+
+                <div
+                    class="exit-icon"
+                    onclick="closeResult()"
+                >
+                    X
                 </div>
-                <div class="confidence-value">{confidence:.2f}%</div>
+
+                <div class="result-icon">
+                    ✅
+                </div>
+
+                <div class="result-label">
+                    Prediction
+                </div>
+
+                <div class="prediction">
+                    {prediction}
+                </div>
+
+                <div class="confidence-label">
+                    Confidence
+                </div>
+
+                <div class="confidence-bar">
+                    <div
+                        class="confidence-fill"
+                        style="width: {confidence:.2f}%;">
+                    </div>
+                </div>
+
+                <div class="confidence-value">
+                    {confidence:.2f}%
+                </div>
+
             </div>
             """
+
         else:
+
             result = f"""
             <div class="result-card">
-                <div class="result-icon">⚠️</div>
-                <div class="result-label">Prediction</div>
-                <div class="prediction">Cant Determine</div>
-                <div class="confidence-label">Confidence</div>
-                <div class="confidence-bar">
-                    <div class="confidence-fill" style="width: 0;"></div>
+
+                <div
+                    class="exit-icon"
+                    onclick="closeResult()"
+                >
+                    X
                 </div>
-                <div class="confidence-value">ERROR</div>
+
+                <div class="result-icon">
+                    ⚠️
+                </div>
+
+                <div class="result-label">
+                    Prediction
+                </div>
+
+                <div class="prediction">
+                    Can't Determine
+                </div>
+
+                <div class="confidence-label">
+                    Confidence
+                </div>
+
+                <div class="confidence-bar">
+                    <div
+                        class="confidence-fill"
+                        style="width: 0%;">
+                    </div>
+                </div>
+
+                <div class="confidence-value">
+                    ERROR
+                </div>
+
                 <p style="color: #f87171; margin-top: 10px;">
                     Please try uploading a clearer image.
                 </p>
+
             </div>
             """
 
     return HttpResponse(f"""
 <!DOCTYPE html>
+
 <html>
+
 <head>
 
     <title>Waste Classifier</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <style>
 
@@ -68,214 +132,499 @@ def home(request):
         }}
 
         body {{
+
             font-family: Arial, sans-serif;
+
             min-height: 100vh;
+
             background:
-                linear-gradient(135deg, #061a17, #0b2e26, #063b32);
+                linear-gradient(
+                    135deg,
+                    #061a17,
+                    #0b2e26,
+                    #063b32
+                );
+
             color: white;
+
             display: flex;
+
             justify-content: center;
+
             align-items: center;
+
             padding: 30px;
+
         }}
+
 
         .container {{
+
             width: 100%;
+
             max-width: 650px;
+
         }}
+
 
         .header {{
+
             text-align: center;
+
             margin-bottom: 30px;
+
         }}
+
 
         .logo {{
+
             width: 70px;
+
             height: 70px;
+
             margin: auto;
+
             border-radius: 50%;
+
             background: #10b981;
+
             display: flex;
+
             justify-content: center;
+
             align-items: center;
+
             font-size: 35px;
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.35);
+
+            box-shadow:
+                0 0 30px
+                rgba(16, 185, 129, 0.35);
+
         }}
+
 
         h1 {{
+
             margin-top: 18px;
+
             font-size: 36px;
+
             font-weight: 700;
+
         }}
+
 
         .subtitle {{
+
             color: #a7c9c0;
+
             margin-top: 8px;
+
             font-size: 15px;
+
         }}
+
 
         .card {{
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+
+            background:
+                rgba(255, 255, 255, 0.08);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.12);
+
             backdrop-filter: blur(15px);
+
             border-radius: 24px;
+
             padding: 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+
+            box-shadow:
+                0 20px 50px
+                rgba(0, 0, 0, 0.3);
+
         }}
+
 
         .upload-area {{
-            border: 2px dashed #2dd4bf;
+
+            border:
+                2px dashed
+                #2dd4bf;
+
             border-radius: 18px;
+
             padding: 45px 20px;
+
             text-align: center;
-            background: rgba(45, 212, 191, 0.05);
+
+            background:
+                rgba(45, 212, 191, 0.05);
+
             transition: 0.3s;
+
         }}
+
 
         .upload-area:hover {{
-            background: rgba(45, 212, 191, 0.1);
-            border-color: #5eead4;
+
+            background:
+                rgba(45, 212, 191, 0.1);
+
+            border-color:
+                #5eead4;
+
         }}
+
 
         .upload-icon {{
+
             font-size: 45px;
+
             margin-bottom: 15px;
+
         }}
+
 
         .upload-title {{
+
             font-size: 18px;
+
             font-weight: bold;
+
             margin-bottom: 8px;
+
         }}
+
 
         .upload-text {{
+
             color: #9fbdb7;
+
             font-size: 13px;
+
             margin-bottom: 20px;
+
         }}
+
 
         input[type="file"] {{
+
             width: 100%;
+
             max-width: 350px;
+
             padding: 12px;
+
             border-radius: 10px;
+
             background: #102f29;
+
             color: white;
-            border: 1px solid #28594f;
+
+            border:
+                1px solid
+                #28594f;
+
         }}
+
 
         input[type="file"]::file-selector-button {{
+
             background: #10b981;
+
             color: white;
+
             border: none;
+
             padding: 9px 14px;
+
             border-radius: 7px;
+
             cursor: pointer;
+
             margin-right: 10px;
+
         }}
+
 
         .predict-button {{
+
             width: 100%;
+
             margin-top: 20px;
+
             padding: 15px;
+
             border: none;
+
             border-radius: 12px;
-            background: linear-gradient(135deg, #10b981, #14b8a6);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #10b981,
+                    #14b8a6
+                );
+
             color: white;
+
             font-size: 16px;
+
             font-weight: bold;
+
             cursor: pointer;
+
             transition: 0.3s;
+
         }}
+
 
         .predict-button:hover {{
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(16, 185, 129, 0.3);
+
         }}
+
 
         .result-card {{
-            margin-top: 25px;
-            padding: 25px;
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(45, 212, 191, 0.3);
+
+            padding: 30px;
+
+            background:
+                rgba(16, 185, 129, 0.08);
+
+            border:
+                1px solid
+                rgba(45, 212, 191, 0.3);
+
             border-radius: 18px;
+
             text-align: center;
+
+            position: fixed;
+
+            left: 50%;
+
+            top:59.7%;
+
+            transform: translate(-50%, -49%);
+
+            width: calc(100% - 40px);
+
+            max-width: 650px;
+
+            min-height: 0px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.5);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0b2e26,
+                    #063b32
+                );
+
+            z-index: 1000;
+
         }}
+
+
+        .exit-icon {{
+
+            position: absolute;
+
+            top: 15px;
+
+            right: 20px;
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            color: #a7c9c0;
+
+            transition: 0.2s;
+
+        }}
+
+
+        .exit-icon:hover {{
+
+            color: white;
+
+            transform: scale(1.1);
+
+        }}
+
 
         .result-icon {{
-            font-size: 35px;
-            margin-bottom: 10px;
+
+            margin-top: 80px;
+
+            font-size: 55px;
+
+            margin-bottom: 50px;
+
         }}
+
 
         .result-label {{
+
             color: #7dd3c7;
+
             font-size: 12px;
+
             letter-spacing: 2px;
+
             font-weight: bold;
+
         }}
+
 
         .prediction {{
+
             font-size: 32px;
+
             font-weight: bold;
+
             color: #5eead4;
-            margin: 8px 0 20px;
+
+            margin: 8px 0 30px;
+
             text-transform: capitalize;
+
         }}
+
 
         .confidence-label {{
+
             color: #a7c9c0;
+
             font-size: 14px;
+
             margin-bottom: 8px;
+
         }}
+
 
         .confidence-bar {{
+
             width: 100%;
+
             height: 10px;
+
             background: #173d35;
+
             border-radius: 20px;
+
             overflow: hidden;
+
         }}
+
 
         .confidence-fill {{
+
             height: 100%;
-            background: linear-gradient(90deg, #10b981, #2dd4bf);
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #10b981,
+                    #2dd4bf
+                );
+
             border-radius: 20px;
+
         }}
+
 
         .confidence-value {{
+
             margin-top: 10px;
+
             font-size: 20px;
+
             font-weight: bold;
+
             color: #6ee7b7;
+
         }}
 
+
         .footer {{
+
             text-align: center;
+
             margin-top: 20px;
+
             color: #71948c;
+
             font-size: 12px;
+
         }}
+
 
         @media (max-width: 600px) {{
 
             body {{
+
                 padding: 20px;
+
             }}
+
 
             h1 {{
+
                 font-size: 28px;
+
             }}
+
 
             .card {{
+
                 padding: 20px;
+
             }}
+
 
             .upload-area {{
+
                 padding: 35px 15px;
+
             }}
 
+
             .prediction {{
+
                 font-size: 26px;
+
+            }}
+
+
+            .result-card {{
+
+                min-height: 0px;
+
+            }}
+
+
+            .result-icon {{
+
+                margin-top: 60px;
+
+                margin-bottom: 40px;
+
             }}
 
         }}
@@ -284,9 +633,14 @@ def home(request):
 
 </head>
 
+
 <body>
 
-    <div class="container">
+
+    <div
+        class="container"
+        id="container"
+    >
 
         <div class="header">
 
@@ -294,10 +648,13 @@ def home(request):
                 ♻
             </div>
 
-            <h1>Waste Classifier</h1>
+            <h1>
+                Waste Classifier
+            </h1>
 
             <p class="subtitle">
-                Upload an image and let the AI identify the type of waste.
+                Upload an image and I will identify
+                the type of waste.
             </p>
 
         </div>
@@ -305,7 +662,10 @@ def home(request):
 
         <div class="card">
 
-            <form method="POST" enctype="multipart/form-data">
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
 
                 <div class="upload-area">
 
@@ -330,23 +690,59 @@ def home(request):
 
                 </div>
 
-                <button type="submit" class="predict-button">
+
+                <button
+                    type="submit"
+                    class="predict-button"
+                >
                     🔍 Analyze Image
                 </button>
 
             </form>
 
-            {result}
-
         </div>
 
+
         <div class="footer">
-            AI-Powered Waste Classification System BY DAVE
+            Waste Classification System BY DAVE
         </div>
 
     </div>
 
+
+    {result}
+
+
+    <script>
+
+        function closeResult() {{
+
+            const resultCard =
+                document.querySelector(".result-card");
+
+            const container =
+                document.getElementById("container");
+
+            if (resultCard) {{
+
+                resultCard.style.display = "none";
+
+            }}
+
+            if (container) {{
+
+                container.style.display = "block";
+
+            }}
+
+        }}
+
+    </script>
+
+
 </body>
+
 </html>
 """)
+
 
