@@ -41,3 +41,4 @@ tzdata==2026.4
 urllib3==2.8.0
 wheel==0.48.0
 wrapt==2.4.1
+gunicorn==23.0.0
