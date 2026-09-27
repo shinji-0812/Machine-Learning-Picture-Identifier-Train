@@ -51,8 +51,7 @@ def home(request):
 
                 <div class="confidence-bar">
                     <div
-                        class="confidence-fill"
-                        style="width: {confidence:.2f}%;">
+                        class="confidence-fill">
                     </div>
                 </div>
 
@@ -199,8 +198,35 @@ def home(request):
             box-shadow:
                 0 0 30px
                 rgba(16, 185, 129, 0.35);
+            transition: 0.3s;
 
         }}
+        .logo:hover {{
+        
+                    width: 70px;
+        
+                    height: 70px;
+        
+                    margin: auto;
+        
+                    border-radius: 50%;
+        
+                    background: #10b981;
+        
+                    display: flex;
+        
+                    justify-content: center;
+        
+                    align-items: center;
+        
+                    font-size: 35px;
+        
+                    box-shadow:
+                        0 0 90px
+                        rgba(16, 185, 129, 0.35);
+                    transition: 0.3s;
+        
+                }}
 
 
         h1 {{
@@ -258,6 +284,7 @@ def home(request):
             padding: 45px 20px;
 
             text-align: center;
+            cursor: pointer;
 
             background:
                 rgba(45, 212, 191, 0.05);
@@ -265,7 +292,6 @@ def home(request):
             transition: 0.3s;
 
         }}
-
 
         .upload-area:hover {{
 
@@ -308,45 +334,109 @@ def home(request):
 
         }}
 
-
-        input[type="file"] {{
-
+        .upload-modal {{
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
             width: 100%;
+            height: 100%;
 
-            max-width: 350px;
+            background: rgba(0, 0, 0, 0.5);
 
-            padding: 12px;
-
-            border-radius: 10px;
-
-            background: #102f29;
-
-            color: white;
-
-            border:
-                1px solid
-                #28594f;
-
+            justify-content: center;
+            align-items: center;
         }}
 
+        .upload-modal-content {{
+            width: 100%;
+            max-width: 400px;
 
-        input[type="file"]::file-selector-button {{
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
 
-            background: #10b981;
+            padding: 65px;
+            padding-left: 30px;
+            padding-right: 30px;
 
-            color: white;
+            text-align: center;
 
-            border: none;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
 
-            padding: 9px 14px;
+            animation: popup 0.5s ease;
+        }}
 
-            border-radius: 7px;
+        .modal-title {{
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }}
+
+        .modal-buttons {{
+            display: flex;
+            gap: 15px;
+        }}
+
+        .choice-button {{
+            flex: 1;
+
+            padding: 50px;
+
+            border: dashed 2px #10b981;
+            border-radius: 14px;
+
+            background: transparent;
+            color: #10b981;
+
+            font-size: 16px;
+            font-weight: bold;
 
             cursor: pointer;
-
-            margin-right: 10px;
-
         }}
+
+        .choice-button:hover {{
+            opacity: 0.9;
+        }}
+
+        .cancel-button {{
+            width: 100%;
+
+            margin-top: 45px;
+
+            padding: 13px;
+
+            border: none;
+            border-radius: 12px;
+
+            background: red;
+            color: white;
+
+            font-size: 15px;
+
+            cursor: pointer;
+            transition: 0.3s;
+        }}
+
+        .cancel-button:hover {{
+            transform: translateY(-2px);
+        }}
+
+        @keyframes popup {{
+            from {{
+                transform: scale(0.4);
+                opacity: 0;
+            }}
+
+            to {{
+                transform: scale(1);
+                opacity: 1;
+            }}
+        }}
+        
+
+
+        
 
 
         .predict-button {{
@@ -397,8 +487,8 @@ def home(request):
 
             padding: 30px;
 
-            background:
-                rgba(16, 185, 129, 0.08);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
 
             border:
                 1px solid
@@ -426,12 +516,6 @@ def home(request):
                 0 20px 60px
                 rgba(0, 0, 0, 0.5);
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #0b2e26,
-                    #063b32
-                );
 
             z-index: 1000;
 
@@ -470,7 +554,7 @@ def home(request):
 
         .result-icon {{
 
-            margin-top: 80px;
+            margin-top: 60px;
 
             font-size: 55px;
 
@@ -500,7 +584,7 @@ def home(request):
 
             color: #5eead4;
 
-            margin: 8px 0 30px;
+            margin: 8px 0 10px;
 
             text-transform: capitalize;
 
@@ -524,7 +608,7 @@ def home(request):
 
             height: 10px;
 
-            background: #173d35;
+            background: white;
 
             border-radius: 20px;
 
@@ -543,9 +627,18 @@ def home(request):
                     #10b981,
                     #2dd4bf
                 );
-
             border-radius: 20px;
+            animation: fillAnimation 1.3s forwards;
 
+        }}
+
+        @keyframes fillAnimation {{
+            from {{
+                width: 0%;
+            }}
+            to {{
+                width: {confidence:.2f}%;
+            }}
         }}
 
 
@@ -667,28 +760,48 @@ def home(request):
                 enctype="multipart/form-data"
             >
 
-                <div class="upload-area">
 
-                    <div class="upload-icon">
-                        📷
-                    </div>
-
-                    <div class="upload-title">
-                        Upload Waste Image
-                    </div>
-
-                    <div class="upload-text">
-                        Select an image from your computer
-                    </div>
-
-                    <input
-                        type="file"
-                        name="image"
-                        accept="image/*"
-                        required
-                    >
-
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-title">Upload Waste Image</div>
+                    <div class="upload-text">Please select an image from your device</div>
                 </div>
+
+
+                <div class="upload-modal" id="uploadModal">
+                    <div class="upload-modal-content">
+
+                        <div class="modal-title">
+                            Choose Image Source
+                        </div>
+
+                        <div class="modal-buttons">
+
+                            <button type="button" class="choice-button" id="uploadButton">
+                                📁 Upload
+                            </button>
+
+                            <button type="button" class="choice-button" id="cameraButton">
+                                📷 Camera
+                            </button>
+
+                        </div>
+
+                        <button type="button" class="cancel-button" id="cancelButton">
+                            Cancel
+                        </button>
+
+                    </div>
+                </div>
+
+                <input
+                    type="file"
+                    id="imageInput"
+                    name="image"
+                    accept="image/*"
+                    required
+                    hidden
+                >
 
 
                 <button
@@ -714,30 +827,109 @@ def home(request):
 
 
     <script>
+    function closeResult() {{
+        const resultCard = document.querySelector(".result-card");
+        const container = document.getElementById("container");
 
-        function closeResult() {{
-
-            const resultCard =
-                document.querySelector(".result-card");
-
-            const container =
-                document.getElementById("container");
-
-            if (resultCard) {{
-
-                resultCard.style.display = "none";
-
-            }}
-
-            if (container) {{
-
-                container.style.display = "block";
-
-            }}
-
+        if (resultCard) {{
+            resultCard.style.display = "none";
         }}
 
-    </script>
+        if (container) {{
+            container.style.display = "block";
+        }}
+    }}
+
+
+        const imageInput = document.getElementById("imageInput");
+        const uploadArea = document.getElementById("upload-area");
+
+        const uploadModal = document.getElementById("uploadModal");
+
+        const uploadButton = document.getElementById("uploadButton");
+        const cameraButton = document.getElementById("cameraButton");
+
+        const cancelButton = document.getElementById("cancelButton");
+
+
+
+        uploadArea.addEventListener("click", function() {{
+
+            uploadModal.style.display = "flex";
+
+        }});
+
+
+   
+        uploadButton.addEventListener("click", function() {{
+
+            imageInput.removeAttribute("capture");
+
+            uploadModal.style.display = "none";
+
+            imageInput.click();
+
+        }});
+
+
+  
+        cameraButton.addEventListener("click", function() {{
+
+            imageInput.setAttribute("capture", "environment");
+
+            uploadModal.style.display = "none";
+
+            imageInput.click();
+
+        }});
+
+
+
+        cancelButton.addEventListener("click", function() {{
+
+            uploadModal.style.display = "none";
+
+        }});
+
+
+
+        uploadModal.addEventListener("click", function(event) {{
+
+            if (event.target === uploadModal) {{
+
+                uploadModal.style.display = "none";
+
+            }}
+
+        }});
+
+
+        // IMAGE SELECTED
+        imageInput.addEventListener("change", function() {{
+
+            if (this.files && this.files[0]) {{
+
+                const file = this.files[0];
+
+                const image = document.createElement("img");
+
+                image.src = URL.createObjectURL(file);
+
+                image.style.width = "100%";
+                image.style.height = "100%";
+                image.style.objectFit = "cover";
+                image.style.borderRadius = "12px";
+
+                uploadArea.innerHTML = "";
+
+                uploadArea.appendChild(image);
+
+            }}
+
+        }});
+
+
+</script>
 
 
 </body>
