@@ -8,8 +8,14 @@ BATCH_SIZE = 32
 DATASET_PATH = 'waste_classifier/dataset'
 MODEL_DIR = 'waste_ml/DATA'
 EPOCHS_FROZEN = 15
-EPOCHS_FINE_TUNE = 15
+EPOCHS_FINE_TUNE = 15   
 SEED = 123
+
+if os.path.exists("waste_ml/Data/class_names.txt"):
+    os.remove("waste_ml/Data/class_names.txt")
+
+if os.path.exists("waste_ml/DATA/waste_model.keras"):
+    os.remove("waste_ml/DATA/waste_model.keras")
 
 os.makedirs(MODEL_DIR, exist_ok=True)
 

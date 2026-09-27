@@ -51,7 +51,7 @@ def home(request):
 
                 <div class="confidence-bar">
                     <div
-                        class="confidence-fill">
+                        class="confidence-fill" style="width: {confidence:.2f}%;">
                     </div>
                 </div>
 
@@ -365,6 +365,8 @@ def home(request):
             box-shadow: 0 15px 40px rgba(0,0,0,0.25);
 
             animation: popup 0.5s ease;
+
+            backdrop-filter: blur(8px);
         }}
 
         .modal-title {{
@@ -375,7 +377,7 @@ def home(request):
 
         .modal-buttons {{
             display: flex;
-            gap: 15px;
+            gap: 10px;
         }}
 
         .choice-button {{
@@ -637,7 +639,7 @@ def home(request):
                 width: 0%;
             }}
             to {{
-                width: {confidence:.2f}%;
+                width: 100%;
             }}
         }}
 
@@ -722,6 +724,22 @@ def home(request):
 
         }}
 
+
+        .title::after {{
+            content: "|";
+            margin-left: 3px;
+            animation: blink 0.7s infinite;
+            
+        }}
+
+        @keyframes blink {{
+            50%{{
+                opacity: 0;
+            }}
+        }}
+
+
+
     </style>
 
 </head>
@@ -741,8 +759,8 @@ def home(request):
                 ♻
             </div>
 
-            <h1>
-                Waste Classifier
+            <h1 class="title" id="typing_title">
+                
             </h1>
 
             <p class="subtitle">
@@ -904,7 +922,7 @@ def home(request):
         }});
 
 
-        // IMAGE SELECTED
+        
         imageInput.addEventListener("change", function() {{
 
             if (this.files && this.files[0]) {{
@@ -927,6 +945,60 @@ def home(request):
             }}
 
         }});
+    
+        function typeWriterEffect() {{
+
+            const textContent = document.getElementById("typing_title");
+
+            const text = "Waste Classifier";
+
+            let index = 0;
+            let deleting = false;
+
+            function type() {{
+
+                if (!deleting) {{
+
+                    textContent.textContent = text.substring(0, index);
+
+                    index++;
+
+                    if (index > text.length) {{
+
+                        deleting = true;
+
+                        setTimeout(type, 1500);
+
+                        return;
+                    }}
+
+                    setTimeout(type, 100);
+
+                }} else {{
+
+                    textContent.textContent = text.substring(0, index);
+
+                    index--;
+
+                    if (index < 0) {{
+
+                        index = 0;
+
+                        deleting = false;
+
+                        setTimeout(type, 500);
+
+                        return;
+                    }}
+
+                    setTimeout(type, 50);
+                }}
+            }}
+
+            type();
+        }}
+
+        typeWriterEffect();
 
 
 </script>
