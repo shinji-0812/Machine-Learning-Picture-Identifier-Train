@@ -20,10 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
-SECRET_KEY = os.environ.get(
-    "DJANGO_SECRET_KEY",
-    "django-insecure-development-key"
-)
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-key")
 
 DEBUG = True
 
@@ -31,6 +28,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "192.168.137.1",
+    ".vercel.app"
 ]
 
 
